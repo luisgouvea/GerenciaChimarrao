@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.Imagem.Path)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.StatusGaucho.Descricao)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Nome)
         </th>
         <th></th>
@@ -24,6 +27,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Imagem.Path)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusGaucho.Descricao)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Nome)

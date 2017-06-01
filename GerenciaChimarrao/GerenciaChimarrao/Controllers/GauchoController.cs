@@ -17,7 +17,7 @@ namespace GerenciaChimarrao.Controllers
         // GET: Gaucho
         public ActionResult Index()
         {
-            var gauchos = db.Gauchos.Include(g => g.Imagem);
+            var gauchos = db.Gauchos.Include(g => g.Imagem).Include(g => g.StatusGaucho);
             return View(gauchos.ToList());
         }
 
@@ -40,6 +40,7 @@ namespace GerenciaChimarrao.Controllers
         public ActionResult Create()
         {
             ViewBag.ImagemID = new SelectList(db.Imagens, "ImagemID", "Path");
+            ViewBag.StatusGauchoID = new SelectList(db.StatusGauchos, "StatusGauchoID", "Descricao");
             return View();
         }
 
@@ -48,7 +49,7 @@ namespace GerenciaChimarrao.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nome,ImagemID")] Gaucho gaucho)
+        public ActionResult Create([Bind(Include = "ID,Nome,ImagemID,StatusGauchoID")] Gaucho gaucho)
         {
             if (ModelState.IsValid)
             {
@@ -58,6 +59,7 @@ namespace GerenciaChimarrao.Controllers
             }
 
             ViewBag.ImagemID = new SelectList(db.Imagens, "ImagemID", "Path", gaucho.ImagemID);
+            ViewBag.StatusGauchoID = new SelectList(db.StatusGauchos, "StatusGauchoID", "Descricao", gaucho.StatusGauchoID);
             return View(gaucho);
         }
 
@@ -74,6 +76,7 @@ namespace GerenciaChimarrao.Controllers
                 return HttpNotFound();
             }
             ViewBag.ImagemID = new SelectList(db.Imagens, "ImagemID", "Path", gaucho.ImagemID);
+            ViewBag.StatusGauchoID = new SelectList(db.StatusGauchos, "StatusGauchoID", "Descricao", gaucho.StatusGauchoID);
             return View(gaucho);
         }
 
@@ -82,7 +85,7 @@ namespace GerenciaChimarrao.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Nome,ImagemID")] Gaucho gaucho)
+        public ActionResult Edit([Bind(Include = "ID,Nome,ImagemID,StatusGauchoID")] Gaucho gaucho)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +94,7 @@ namespace GerenciaChimarrao.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.ImagemID = new SelectList(db.Imagens, "ImagemID", "Path", gaucho.ImagemID);
+            ViewBag.StatusGauchoID = new SelectList(db.StatusGauchos, "StatusGauchoID", "Descricao", gaucho.StatusGauchoID);
             return View(gaucho);
         }
 
@@ -118,6 +122,12 @@ namespace GerenciaChimarrao.Controllers
             db.Gauchos.Remove(gaucho);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ViventesCaminhando()
+        {
+            var gauchosCaminhando = this.db.Gauchos.Where(o => o.StatusGaucho.Descricao == "Caminhando na rua").DefaultIfEmpty(null);
+            return View(gauchosCaminhando.ToList());
         }
 
         protected override void Dispose(bool disposing)

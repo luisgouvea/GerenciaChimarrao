@@ -34,7 +34,7 @@ namespace GerenciaChimarrao.Controllers
 
         public ActionResult VisualizaRoda()
         {
-            var gauchos = db.Gauchos.Include(g => g.Imagem).ToList();
+            var gauchos = db.Gauchos.Include(g => g.Imagem).Where(g=>g.StatusGaucho.Descricao != "Caminhando na rua").ToList();
             string conteudo = "";
             foreach (Gaucho g in gauchos)
             {
@@ -45,7 +45,7 @@ namespace GerenciaChimarrao.Controllers
         }
         public ActionResult EncontraChimarraoVivente()
         {
-            var gauchos = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).ToList();
+            var gauchos = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).Where(g => g.StatusGaucho.Descricao != "Caminhando na rua").ToList();
             string nomeVivente = "";
             foreach (Gaucho g in gauchos)
             {
@@ -61,7 +61,7 @@ namespace GerenciaChimarrao.Controllers
 
         public ActionResult PassarParaProximo(int id)
         {
-            var gauchosTotal = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).ToList();
+            var gauchosTotal = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).Where(g => g.StatusGaucho.Descricao != "Caminhando na rua").ToList();
             Gaucho gauchoQuerPassar = db.Gauchos.Find(id);
             string mensagem = "";
             if (gauchoQuerPassar.StatusGaucho.Descricao == "Esperando mate")
@@ -71,16 +71,20 @@ namespace GerenciaChimarrao.Controllers
             }
             else
             {
-                Gaucho proximoGaucho = this.db.Gauchos.Where(x => x.ID != id).OrderByDescending(x => x.ID).First();
-                proximoGaucho.StatusGaucho.Descricao = "Bebendo mate";
-                proximoGaucho.Imagem.Path = "/Imagens/bebendoMate.jpg";
+                var proximoGaucho = this.db.Gauchos.Where(o => (o.ID != id) && (o.StatusGaucho.Descricao != "Caminhando na rua")).OrderByDescending(or => or.ID).DefaultIfEmpty(null).First();
+                if (proximoGaucho != null)
+                {
+                    proximoGaucho.StatusGaucho.Descricao = "Bebendo mate";
+                    proximoGaucho.Imagem.Path = "/Imagens/bebendoMate.jpg";
 
-                gauchoQuerPassar.StatusGaucho.Descricao = "Esperando mate";
-                gauchoQuerPassar.Imagem.Path = "/Imagens/esperandoMate.jpg";
+                    gauchoQuerPassar.StatusGaucho.Descricao = "Esperando mate";
+                    gauchoQuerPassar.Imagem.Path = "/Imagens/esperandoMate.jpg";
 
-                db.Entry(proximoGaucho).State = EntityState.Modified;
-                db.Entry(gauchoQuerPassar).State = EntityState.Modified;
-                db.SaveChanges();
+                    db.SaveChanges();
+                }
+                else{
+                    this.montaAlertJavaScript("Não existe ninguem para passar a cuia vivente");
+                }
             }
             return View("Index", gauchosTotal);
         }
@@ -90,9 +94,12 @@ namespace GerenciaChimarrao.Controllers
             Gaucho gauchoQuerSair = db.Gauchos.Find(id);
             if (gauchoQuerSair.StatusGaucho.Descricao == "Bebendo mate")
             {
-                Gaucho proximoGaucho = this.db.Gauchos.Where(x => x.ID != id).OrderByDescending(x => x.ID).First();
-                proximoGaucho.StatusGaucho.Descricao = "Bebendo mate";
-                proximoGaucho.Imagem.Path = "/Imagens/bebendoMate.jpg";
+                var proximoGaucho = this.db.Gauchos.Where(o => (o.ID != id) && (o.StatusGaucho.Descricao != "Caminhando na rua")).OrderByDescending(or => or.ID).DefaultIfEmpty(null).First();
+                if (proximoGaucho != null)
+                {
+                    proximoGaucho.StatusGaucho.Descricao = "Bebendo mate";
+                    proximoGaucho.Imagem.Path = "/Imagens/bebendoMate.jpg";
+                }
             }
             gauchoQuerSair.StatusGaucho.Descricao = "Caminhando na rua";
             gauchoQuerSair.Imagem.Path = "/Imagens/esperandoMate.jpg";
@@ -100,7 +107,11 @@ namespace GerenciaChimarrao.Controllers
             db.Entry(gauchoQuerSair).State = EntityState.Modified;
             db.SaveChanges();
             var gauchosTotal = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).Where(x => x.StatusGaucho.Descricao != "Caminhando na rua").ToList();
-            return View("Index", gauchosTotal);
+            if (gauchosTotal != null)
+            {
+                return View("Index", gauchosTotal);
+            }
+            return View("Index", null);
         }
 
         public void montaAlertJavaScript(string conteudo)
