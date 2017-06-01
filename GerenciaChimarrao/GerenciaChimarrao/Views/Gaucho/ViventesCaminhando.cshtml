@@ -5,9 +5,9 @@
 
 <h2>ViventesCaminhando</h2>
 
-@if (Model.Count() < 1)
+@if (ViewBag.gauchosVazio == true)
 {
-    <h2>Ninguem na roda do chimarrao</h2>
+    <h3>Ninguem na roda do Chimarrão</h3>
 }
 else
 {
@@ -15,6 +15,6 @@ else
     {
         <label>Nome: @Html.DisplayFor(modelItem => item.Nome)</label>
         <br />
-        //@Html.ActionLink("Colocar Vivente na roda", "Create", "Gaucho", new { id = item.ID }, new { @class = "btn btn-primary" })
+        //@Html.ActionLink("Colocar Vivente na roda", "VoltarViventeParaRoda", "Gaucho", new { id = item.ID }, new { @class = "btn btn-primary" })
     }
 }

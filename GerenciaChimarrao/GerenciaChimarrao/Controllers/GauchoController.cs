@@ -126,10 +126,15 @@ namespace GerenciaChimarrao.Controllers
 
         public ActionResult ViventesCaminhando()
         {
-            var gauchosCaminhando = this.db.Gauchos.Where(o => o.StatusGaucho.Descricao == "Caminhando na rua").DefaultIfEmpty(null);
+            IEnumerable<Gaucho> gauchosCaminhando = this.db.Gauchos.Where(o => o.StatusGaucho.Descricao == "Caminhando na rua").DefaultIfEmpty(null);
+            if (gauchosCaminhando.First() == null)
+            {
+                ViewBag.gauchosVazio = true;
+            }
             return View(gauchosCaminhando.ToList());
-        }
 
+        }
+                
         protected override void Dispose(bool disposing)
         {
             if (disposing)
