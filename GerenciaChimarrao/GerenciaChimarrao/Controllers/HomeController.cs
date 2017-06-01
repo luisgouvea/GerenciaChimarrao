@@ -85,6 +85,24 @@ namespace GerenciaChimarrao.Controllers
             return View("Index", gauchosTotal);
         }
 
+        public ActionResult SairDaRoda(int id)
+        {
+            Gaucho gauchoQuerSair = db.Gauchos.Find(id);
+            if (gauchoQuerSair.StatusGaucho.Descricao == "Bebendo mate")
+            {
+                Gaucho proximoGaucho = this.db.Gauchos.Where(x => x.ID != id).OrderByDescending(x => x.ID).First();
+                proximoGaucho.StatusGaucho.Descricao = "Bebendo mate";
+                proximoGaucho.Imagem.Path = "/Imagens/bebendoMate.jpg";
+            }
+            gauchoQuerSair.StatusGaucho.Descricao = "Caminhando na rua";
+            gauchoQuerSair.Imagem.Path = "/Imagens/esperandoMate.jpg";
+
+            db.Entry(gauchoQuerSair).State = EntityState.Modified;
+            db.SaveChanges();
+            var gauchosTotal = db.Gauchos.Include(i => i.Imagem).Include(s => s.StatusGaucho).Where(x => x.StatusGaucho.Descricao != "Caminhando na rua").ToList();
+            return View("Index", gauchosTotal);
+        }
+
         public void montaAlertJavaScript(string conteudo)
         {
             Response.Write("<script>alert('"+conteudo+"');</script>");

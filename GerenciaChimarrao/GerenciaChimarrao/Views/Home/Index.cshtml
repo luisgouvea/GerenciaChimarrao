@@ -23,7 +23,7 @@
                     @Html.ActionLink("Visualizar roda", "VisualizaRoda", "Home", null, new { @class = "btn btn-primary" })
                     @Html.ActionLink("Quem está com o chimarrão?", "EncontraChimarraoVivente", "Home", null, new { @class = "btn btn-primary" })
                     @Html.ActionLink("Passar a cuia", "PassarParaProximo", "Home", new { id = item.ID }, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Sair da roda", "Create", "Gaucho", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Sair da roda", "SairDaRoda", "Home", new { id = item.ID }, new { @class = "btn btn-primary" })
                 </div>
             </div>
             @if (item.StatusGaucho.Descricao == "Bebendo mate")
