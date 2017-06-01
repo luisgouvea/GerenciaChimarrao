@@ -10,6 +10,7 @@ namespace GerenciaChimarrao.Controllers
     {
         public ActionResult Index()
         {
+            this.teste();
             return View();
         }
 
@@ -25,6 +26,10 @@ namespace GerenciaChimarrao.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        public void teste()
+        {
+            Response.Write("<script>alert('Hello');</script>");
         }
     }
 }
