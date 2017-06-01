@@ -181,6 +181,7 @@
     <Compile Include="Models\InicializadorBancoDeDados.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MapeamentoEntidadesContext.cs" />
+    <Compile Include="Models\StatusGaucho.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -191,7 +192,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Imagens\viventeNoChimarrao.jpg" />
+    <Content Include="Imagens\bebendoMate.jpg" />
+    <Content Include="Imagens\esperandoMate.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -206,7 +208,10 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="ViewStyle\CSS\Home.css" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

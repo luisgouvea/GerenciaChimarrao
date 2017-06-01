@@ -1,6 +1,8 @@
-﻿@{
+﻿@model IEnumerable<GerenciaChimarrao.Models.Gaucho>
+@{
     ViewBag.Title = "Home Page";
 }
+<link rel="stylesheet" type="text/css" href="~/ViewStyle/CSS/Home.css">
 
 <div class="jumbotron">
     <h1>ASP.NET</h1>
@@ -10,28 +12,53 @@
 
 
 <div class="container" style="text-align:center">
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <label>teste</label>
-            <img src="~/Imagens/viventeNoChimarrao.jpg" class="img-responsive">
-            <button type="submit">Ver a roda</button>
-            <button type="submit">Quem está com a cuia?</button>
-            <button type="submit">Passar a cuia</button>
-            <button type="submit">Sair da roda</button>
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 columnMeio">
+                <label>@Html.DisplayFor(modelItem => item.Nome)</label>
+                <img src=@Html.DisplayFor(modelItem => item.Imagem.Path) class="img-responsive">
+                <div class="botoes">
+                    @Html.ActionLink("Visualizar roda", "VisualizaRoda", "Home", null, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Quem está com o chimarrão?", "EncontraChimarraoVivente", "Home", null, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Passar a cuia", "PassarParaProximo", "Home", new { id = item.ID }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Sair da roda", "Create", "Gaucho", new { id = item.ID }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+            @if (item.StatusGaucho.Descricao == "Bebendo mate")
+            {
+                <div class="col-md-4 teste">
+                    <a>O Gaudério @Html.DisplayFor(modelItem => item.Nome) está bebendo</a>
+                </div>
+            }
         </div>
-        <div class="col-md-4"></div>
-    </div>
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <label>teste2</label>
-            <img src="~/Imagens/viventeNoChimarrao.jpg" class="img-responsive">
-            <button type="submit">Ver a roda</button>
-            <button type="submit">Quem está com a cuia?</button>
-            <button type="submit">Passar a cuia</button>
-            <button type="submit">Sair da roda</button>
-        </div>
-    </div>
+    }
 </div>
+
+@*<div class="container" style="text-align:center">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <label>teste</label>
+                <img src="~/Imagens/viventeNoChimarrao.jpg" class="img-responsive">
+                <button type="submit">Ver a roda</button>
+                <button type="submit">Quem está com a cuia?</button>
+                <button type="submit">Passar a cuia</button>
+                <button type="submit">Sair da roda</button>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <label>teste2</label>
+                <img src="~/Imagens/viventeNoChimarrao.jpg" class="img-responsive">
+                <button type="submit">Ver a roda</button>
+                <button type="submit">Quem está com a cuia?</button>
+                <button type="submit">Passar a cuia</button>
+                <button type="submit">Sair da roda</button>
+            </div>
+        </div>
+    </div>*@
